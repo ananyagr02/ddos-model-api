@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: ddos-api
-    env: python
-    pythonVersion: "3.10" 
-    plan: free
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app"
-    healthCheckPath: /
