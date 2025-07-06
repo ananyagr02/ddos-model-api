@@ -1,0 +1,16 @@
+services:
+  # This defines your web service
+  - type: web
+    name: ddos-api
+    # Specifies the environment type
+    env: python
+    # CRITICAL: This MUST match your Colab environment's Python version
+    pythonVersion: "3.11"
+    # The plan for the service (free tier is fine for starting)
+    plan: free
+    # The command to install all libraries from your requirements.txt
+    buildCommand: "pip install -r requirements.txt"
+    # The command to start the production server
+    startCommand: "gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app"
+    # A path Render can check to see if your service is healthy
+    healthCheckPath: /
