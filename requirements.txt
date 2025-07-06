@@ -1,0 +1,14 @@
+# Core ML Libraries (versions from your environment)
+pandas==2.2.3
+numpy==1.26.4
+scikit-learn==1.2.2
+lightgbm==4.6.0
+
+# PyTorch (IMPORTANT: See note below)
+torch==2.6.0
+
+# Web Server & API Libraries (using recent stable versions)
+fastapi==0.115.13
+uvicorn[standard]==0.34.3
+gunicorn==23.0.0
+python-multipart==0.0.20
