@@ -3,9 +3,10 @@ services:
   - type: web
     name: ddos-api
     # Specifies the environment type
-    env: python
+    env: docker
     # CRITICAL: This MUST match your Colab environment's Python version
-    pythonVersion: "3.11"
+    # pythonVersion: "3.11"
+    dockerfilePath: ./Dockerfile.render # This file does not exist, forcing a native build
     # The plan for the service (free tier is fine for starting)
     plan: free
     # The command to install all libraries from your requirements.txt
@@ -15,3 +16,4 @@ services:
     startCommand: "gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app"
     # A path Render can check to see if your service is healthy
     healthCheckPath: /
+    
