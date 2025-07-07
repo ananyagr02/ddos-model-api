@@ -6,6 +6,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import lightgbm as lgb
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, RootModel # <-- IMPORTANT: Import RootModel
 from typing import List, Dict
@@ -69,7 +70,7 @@ try:
     hybrid_model = HybridGatedNet(len(feature_names), NUM_CLASSES).to(device)
     hybrid_model.load_state_dict(torch.load(os.path.join(ARTIFACTS_PATH, "hybrid_model.pth"), map_location=device))
     hybrid_model.eval()
-    hgae_lgbm = joblib.load(os.path.join(ARTIFACTS_PATH, "hgae_lgbm.txt"))
+    hgae_lgbm = lgb.Booster(model_file=os.path.join(ARTIFACTS_PATH, "hgae_lgbm.txt"))
     hgae_temporal = TemporalCNNExpert(len(feature_names), NUM_CLASSES).to(device)
     hgae_temporal.load_state_dict(torch.load(os.path.join(ARTIFACTS_PATH, "hgae_temporal.pth"), map_location=device))
     hgae_temporal.eval()
@@ -94,7 +95,7 @@ def get_probs_hybrid(model, X_seq_tensor):
     return probs
 
 def get_probs_hgae(lgbm, temporal, fusion, gating, X_tab, X_seq):
-    lgb_probs = lgbm.predict_proba(X_tab)
+    lgb_probs = lgbm.predict(X_tab)
     with torch.no_grad():
         X_seq_tensor = torch.tensor(X_seq, dtype=torch.float32).to(device)
         logits, feats = temporal(X_seq_tensor)
